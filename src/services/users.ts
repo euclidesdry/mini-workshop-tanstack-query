@@ -6,9 +6,7 @@ export type UserInfoProps = Omit<User, "id">;
 
 export type UsersList = User[];
 
-type IfUserIdExists<T extends number | undefined> = T extends number
-  ? User
-  : UsersList;
+export type IfUserIdExists<T = undefined> = T extends number ? User : UsersList;
 
 export async function listUsers(id?: number) {
   const userList = await api.get<IfUserIdExists<typeof id>>(
