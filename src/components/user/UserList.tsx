@@ -97,7 +97,11 @@ export default function UserList() {
 
     await createUser({ ...formData, id: newUserID })
       .then((createdUser) => {
-        console.log("User created: " + JSON.stringify(createdUser));
+        void messageApi.open({
+          type: "success",
+          content: `O usuário "${createdUser.name}" foi criado com sucesso!`,
+        });
+
         handleUserList();
       })
       .catch((error) => {
