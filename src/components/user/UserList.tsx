@@ -21,9 +21,7 @@ const { confirm } = Modal;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 export default function UserList() {
-  const [messageApi, contextHolder] = message.useMessage({
-    duration: 5,
-  });
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [users, setUsers] = useState<UsersList>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +44,7 @@ export default function UserList() {
 
         setUsers([]);
         setError(error);
-        void messageApi.open({ type: "error", content: SERVER_ERROR });
+        void messageApi.error(SERVER_ERROR, 5);
       })
       .finally(() => {
         setIsLoading(false);
@@ -63,10 +61,10 @@ export default function UserList() {
 
     deleteUser(id)
       .then(() => {
-        void messageApi.open({
-          type: "success",
-          content: `O usuário "${selectedUser.name}" foi removido com sucesso!`,
-        });
+        void messageApi.success(
+          `O usuário "${selectedUser.name}" foi removido com sucesso!`,
+          3
+        );
 
         setUsers((userCurrentValue) =>
           userCurrentValue.filter((user) => user.id !== id)
@@ -79,10 +77,10 @@ export default function UserList() {
 
         setUsers([]);
         setError(error);
-        void messageApi.open({
-          type: "error",
-          content: `Oops! Não foi possível remover o usuário "${selectedUser.name}"`,
-        });
+        void messageApi.error(
+          `Oops! Não foi possível remover o usuário "${selectedUser.name}"`,
+          5
+        );
       })
       .finally(() => {
         setIsDeleting({
@@ -97,19 +95,19 @@ export default function UserList() {
 
     await createUser({ ...formData, id: newUserID })
       .then((createdUser) => {
-        void messageApi.open({
-          type: "success",
-          content: `O usuário "${createdUser.name}" foi criado com sucesso!`,
-        });
+        void messageApi.success(
+          `O usuário "${createdUser.name}" foi criado com sucesso!`,
+          3
+        );
 
         handleUserList();
       })
       .catch((error) => {
         if (!(error instanceof Error)) return;
-        void messageApi.open({
-          type: "error",
-          content: `Oops! Não foi possível criar o usuário "${formData.name}".`,
-        });
+        void messageApi.error(
+          `Oops! Não foi possível criar o usuário "${formData.name}".`,
+          5
+        );
       });
   }
 
